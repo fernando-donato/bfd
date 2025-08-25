@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: lightblue;
+      color: #333;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 200px;
+      font-size: 14px;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border: 1px solid #0077ff;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+
+    button:nth-child(1) {
+      background: #28a745;
+      color: white;
+    }
+
+    button:nth-child(2) {
+      background: #007bff;
+      color: white;
+    }
+
+    button:nth-child(3) {
+      background: #ff9800;
+      color: white;
+    }
+
+    button:nth-child(4) {
+      background: #e53935;
+      color: white;
+    }
+
+    #mensagem {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    li {
+      background: white;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background: #f0f0f0;
+    }
+
+    li.selecionado {
+      background: #a0d2ff;
+      font-weight: bold;
+      border-left: 4px solid #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>CRUD</h1>
+
+  <input type="text" placeholder="Nome" id="nome">
+  <input type="text" placeholder="Telefone" id="telefone">
+  <input type="text" placeholder="E-mail" id="email">
+  <br>
+  <button onclick="salvarDados()">Adicionar</button>
+  <button onclick="recuperarDados()">Recuperar</button>
+  <button onclick="atualizarDados()">Atualizar</button>
+  <button onclick="apagarDados()">Apagar</button>
+
+  <p id="mensagem"></p>
+  <ul id="lista"></ul>
+
+  <script>
+    let itemSelecionado = null;
+
+    function salvarDados() {
+      const nome = document.getElementById("nome").value.trim();
+      const telefone = document.getElementById("telefone").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (nome && telefone && email) {
+        const li = document.createElement("li");
+        li.textContent = `${nome} - ${telefone} - ${email}`;
+
+        li.addEventListener("click", function () {
+          document.querySelectorAll("#lista li").forEach(el => el.classList.remove("selecionado"));
+          li.classList.add("selecionado");
+          itemSelecionado = li;
+        });
+
+        document.getElementById("lista").appendChild(li);
+
+        limparCampos();
+        mostrarMensagem("✅ Dados adicionados!", "green");
+      } else {
+        mostrarMensagem("⚠️ Preencha todos os campos!", "red");
+      }
+    }
+
+    function recuperarDados() {
+      if (itemSelecionado) {
+        const dados = itemSelecionado.textContent.split(" - ");
+        document.getElementById("nome").value = dados[0];
+        document.getElementById("telefone").value = dados[1];
+        document.getElementById("email").value = dados[2];
+        mostrarMensagem("🔄 Dados recuperados!", "blue");
+      } else {
+        mostrarMensagem("⚠️ Selecione um item da lista!", "red");
+      }
+    }
+
+    function atualizarDados() {
+      if (itemSelecionado) {
+        const nome = document.getElementById("nome").value.trim();
+        const telefone = document.getElementById("telefone").value.trim();
+        const email = document.getElementById("email").value.trim();
+
+        if (nome && telefone && email) {
+          itemSelecionado.textContent = `${nome} - ${telefone} - ${email}`;
+          mostrarMensagem("✏️ Item atualizado com sucesso!", "orange");
+
+          // reatribuir o evento de clique porque sobrescrevemos o conteúdo
+          itemSelecionado.addEventListener("click", function () {
+            document.querySelectorAll("#lista li").forEach(el => el.classList.remove("selecionado"));
+            itemSelecionado.classList.add("selecionado");
+          });
+
+          limparCampos();
+        } else {
+          mostrarMensagem("⚠️ Preencha todos os campos para atualizar!", "red");
+        }
+      } else {
+        mostrarMensagem("⚠️ Selecione um item da lista antes de atualizar!", "red");
+      }
+    }
+
+    function apagarDados() {
+      if (itemSelecionado) {
+        itemSelecionado.remove();
+        itemSelecionado = null;
+        limparCampos();
+        mostrarMensagem("🗑️ Item apagado!", "red");
+      } else {
+        mostrarMensagem("⚠️ Selecione um item da lista!", "red");
+      }
+    }
+
+    function limparCampos() {
+      document.getElementById("nome").value = "";
+      document.getElementById("telefone").value = "";
+      document.getElementById("email").value = "";
+    }
+
+    function mostrarMensagem(texto, cor) {
+      const msg = document.getElementById("mensagem");
+      msg.textContent = texto;
+      msg.style.color = cor;
+    }
+  </script>
+</body>
+
+</html>
