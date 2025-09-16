@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini E-Commerce</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .filtros input[type="search"],
+    .filtros select {
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    .faixa-preco {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .produto {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
+      max-width: 300px;
+    }
+
+    .produto button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .produtos-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mini E-Commerce</h1>
+  </header>
+
+  <form class="filtros" id="form-filtros">
+    <input type="search" id="campo-pesquisa" placeholder="Buscar produto...">
+    <button type="submit">Pesquisar</button>
+
+    <select id="categoriaDropdown">
+      <option value="todos">Todas as categorias</option>
+      <option value="calçados">Calçados</option>
+      <option value="roupas">Roupas</option>
+      <option value="acessorios">Acessórios</option>
+    </select>
+
+    <select id="ordenacaoDropdown">
+      <option value="padrao">Ordenar por</option>
+      <option value="destaque">Em destaque</option>
+      <option value="preco-asc">Preço: Do menor para o maior</option>
+      <option value="preco-desc">Preço: Do maior para o menor</option>
+    </select>
+
+    <div class="faixa-preco">
+      <label>Faixa de preço:</label>
+      <input type="search" id="precoMin" placeholder="Mínimo">
+      <span>até</span>
+      <input type="search" id="precoMax" placeholder="Máximo">
+    </div>
+  </form>
+
+  <div class="produtos-container" id="produtos-container">
+    <!-- Produtos inseridos via JavaScript -->
+  </div>
+
+  <script>
+    const produtos = [
+      { nome: "Tênis Esportivo", preco: 200, categoria: "calçados", destaque: true },
+      { nome: "Camisa Polo", preco: 150, categoria: "roupas", destaque: false },
+      { nome: "Relógio Digital", preco: 300, categoria: "acessorios", destaque: true },
+      { nome: "Jaqueta Jeans", preco: 250, categoria: "roupas", destaque: false },
+      { nome: "Boné Estiloso", preco: 100, categoria: "acessorios", destaque: false },
+      { nome: "Chinelo Conforto", preco: 50, categoria: "calçados", destaque: true }
+    ];
+
+    const container = document.getElementById("produtos-container");
+    const formFiltros = document.getElementById("form-filtros");
+
+    function exibirProdutos(lista) {
+      container.innerHTML = "";
+      lista.forEach(prod => {
+        const div = document.createElement("div");
+        div.className = "produto";
+        div.innerHTML = `
+          <p><strong>${prod.nome}</strong></p>
+          <p>R$ ${prod.preco.toFixed(2)}</p>
+          <p>Categoria: ${prod.categoria}</p>
+          <button>Adicionar</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filtrarProdutos(event) {
+      if (event) event.preventDefault();
+
+      const termo = document.getElementById("campo-pesquisa").value.toLowerCase();
+      const categoria = document.getElementById("categoriaDropdown").value;
+      const ordenacao = document.getElementById("ordenacaoDropdown").value;
+      const precoMin = parseFloat(document.getElementById("precoMin").value) || 0;
+      const precoMax = parseFloat(document.getElementById("precoMax").value) || Infinity;
+
+      let filtrados = produtos.filter(p => {
+        const nomeMatch = p.nome.toLowerCase().includes(termo);
+        const categoriaMatch = (categoria === "todos" || p.categoria === categoria);
+        const precoMatch = p.preco >= precoMin && p.preco <= precoMax;
+        return nomeMatch && categoriaMatch && precoMatch;
+      });
+
+      // Ordenação
+      if (ordenacao === "preco-asc") {
+        filtrados.sort((a, b) => a.preco - b.preco);
+      } else if (ordenacao === "preco-desc") {
+        filtrados.sort((a, b) => b.preco - a.preco);
+      } else if (ordenacao === "destaque") {
+        filtrados.sort((a, b) => b.destaque - a.destaque);
+      }
+
+      exibirProdutos(filtrados);
+    }
+
+    // Eventos
+    formFiltros.addEventListener("submit", filtrarProdutos);
+    document.getElementById("categoriaDropdown").addEventListener("change", filtrarProdutos);
+    document.getElementById("ordenacaoDropdown").addEventListener("change", filtrarProdutos);
+    document.getElementById("precoMin").addEventListener("input", filtrarProdutos);
+    document.getElementById("precoMax").addEventListener("input", filtrarProdutos);
+    document.getElementById("campo-pesquisa").addEventListener("input", filtrarProdutos);
+
+    // Inicial
+    exibirProdutos(produtos);
+  </script>
+
+</body>
+</html>
