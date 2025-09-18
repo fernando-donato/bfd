@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Loja</title>
+    <link rel="stylesheet" href="./Estetica.css">
+</head>
+<body>
+    <h1>Mini Loja</h1>
+    <main id="pai">
+        <div id="produto" class="box">
+            <h1>Produtos</h1>
+            <div id="lista-produtos"> <!-- Este é o lugar onde os produtos serão listados -->
+            </div>
+        </div>
+        <div id="carrinho" class="box">
+            <h1>Carrinho</h1>
+        </div>
+    </main>
+
+    <script>
+        /* Lista de produtos */
+        let produtos = [
+            {id: 1, nome: "Camisa", preço: 200},
+            {id: 2, nome: "Tênis", preço: 120},
+            {id: 3, nome: "Livro", preço: 80},
+            {id: 4, nome: "Óculos", preço: 50},
+            {id: 5, nome: "Relógio", preço: 75},
+            {id: 6, nome: "Carteira", preço: 35},
+        ];
+
+        // Carrinho vazio
+        let carrinho = [];
+
+        let listaProdutos = document.getElementById("lista-produtos");
+        let divCarrinho = document.getElementById("carrinho");
+
+        // Função para renderizar os produtos
+        function renderizarProdutos() {
+            produtos.forEach(produto => {
+                const div = document.createElement("div");
+                div.classList.add("produto");
+                
+                div.innerHTML = `
+                    <p>${produto.nome} - R$ ${produto.preço}</p>
+                    <button onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao carrinho</button>
+                `;
+                listaProdutos.appendChild(div);
+            });
+        }
+
+        // Função para adicionar item ao carrinho
+        function adicionarAoCarrinho(id) {
+            let produto = produtos.find(p => p.id === id);
+            if (produto) {
+                carrinho.push(produto);
+                atualizarCarrinho();
+            }
+        }
+
+        // Função para atualizar o carrinho
+        function atualizarCarrinho() {
+            divCarrinho.innerHTML = ""; // Limpa o carrinho antes de atualizar
+
+            if (carrinho.length === 0) {
+                divCarrinho.innerHTML = "<p>O carrinho está vazio.</p>";
+                return;
+            }
+
+            let somaTotal = 0;
+
+            carrinho.forEach((item, index) => {
+                const itemDiv = document.createElement("p");
+                itemDiv.textContent = `${item.nome} - R$ ${item.preço}`;
+                divCarrinho.appendChild(itemDiv);
+                somaTotal += item.preço;
+            });
+
+            const totalDiv = document.createElement("p");
+            totalDiv.textContent = `Total: R$ ${somaTotal.toFixed(2)}`;
+            divCarrinho.appendChild(totalDiv);
+        }
+
+        // Chama a função para renderizar os produtos ao carregar a página
+        renderizarProdutos();
+    </script>
+</body>
+</html>

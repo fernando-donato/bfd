@@ -1,0 +1,43 @@
+#pai{
+  display: flex;
+}
+
+.box {
+  width: 50%;
+  height: 50%;
+  background-color: rgb(28, 165, 51);
+  margin: 5px;
+  padding: 20px;
+  /* Outras estilizações */
+}
+
+#produto{
+    align-items: center;
+
+    width: 30%;
+    margin: auto;   
+    background: rgb(111, 146, 46);
+    padding: 20px;
+}
+
+#camisa{
+    margin: auto;   
+    background: rgb(146, 46, 76);
+    padding: 20px;
+}
+button{
+    align-items: end;
+}
+#carrinho{
+    width: 30%;
+    margin: auto;   
+    background: lightgray;
+    padding: 20px;
+}
+h1 {font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+p {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}

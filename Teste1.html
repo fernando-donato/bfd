@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Loja</title>
+
+    <link rel="stylesheet" href="./Estetica.css">
+
+</head>
+<!-- Tarefas
+ 
+design(imagens) Paulo;
+botão adicinar e ir para o carrinho Catarina;
+carrinho aparecer o que foi adicionado Renan;
+aumentar e diminir quantidade thiago;
+quantificar o somatorio dos valores Fernando;
+função do calculo final Paulo.
+-->
+<body>
+    <h1>Mini Loja</h1>
+    <main id="pai">
+        <div id="produto" class="box">
+            <h1>Produtos</h1>
+        <div id="camisa"> 
+            <p>camisa</p>
+            <p>preco</p>
+            <button>adicionar</button>
+        </div>
+    </div>
+    <div id="carrinho" class="box">
+        <h1>carrinho</h1>
+    </div>
+    <div>
+
+    </div>
+    </main>
+<script>
+/* Lista de produtos*/    
+let produtos = [
+    {id:1, nome: "Camisa", preço: 200},
+    {id:2, nome: "Tênis",preço: 120},
+    {id:3, nome: "livro",preço: 80},
+    {id:3, nome: "Óculos",preço: 50},
+    {id:3, nome: "relógio",preço: 75},
+    {id:3, nome: "Carteira",preço: 35},
+
+]
+// carrinho vazio
+let carrinho = [];
+
+let listaProdutos = document.getElementById("lista-produtos");
+
+let divCarrinho = document.getElementById("carrinho");
+
+/*função para renderizar os produtos*/
+
+function RenderizarProdutos(){
+    produtos.forEach(produto => {
+    const div = document.createElement("div");
+    div.ClassList.add("produto");
+    });
+}
+div.innerHtml =`
+
+<p> ${produto.nome} - R$ ${produto.preco}</p>
+<button onclick="AdicionarAoCarrinho(${produto.id})">Adicionar ao carrinho</button>
+`;
+listaProdutos.appendChild(div); 
+
+
+
+// Função para adicionar item ao carrinho.
+function adicionarAoCarrinho(){
+    let produto = produtos.find(p=> p.id === id);
+    carrinho.push(produto);
+    atualizarCarrinho();
+
+}
+
+function mostrarCarrinho(){
+    divCarrinho.innerHTML =""; // limpa o carrinho antes de atualizar.
+
+
+
+if (carrinho.length ===0){
+    divCarrinho.innerHTML = <p> o carrinho está vazio</p>; return;
+    
+}
+
+carrinho.forEach((item) => {
+    const itemDiv = document.createElement("p");
+    itemDiv.textContent = ` ${item.nome} - R$ ${item.preco}`;
+    divCarrinho:appendChild(itemDiv);
+
+
+});
+}
+</script>
+
+</body>
+</html>
